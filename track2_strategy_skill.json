@@ -1,0 +1,26 @@
+{
+  "asset": "BNB",
+  "timeframe": "1h",
+  "market_regime": "CAPITAL_PRESERVATION",
+  "diagnostics": {
+    "raw_model_drawdown_pct": 16.38,
+    "live_market_sentiment_score": 15,
+    "live_market_sentiment_class": "Extreme Fear",
+    "remediation_status": "ENFORCED_RISK_GOVERNOR"
+  },
+  "risk_controls": {
+    "max_position_size_pct": 0.0,
+    "stop_loss_atr_multiplier": 1.0,
+    "take_profit_r_multiple": 1.5,
+    "max_drawdown_cap_pct": 5.0
+  },
+  "entry_rules": {
+    "primary_indicator": "RSI_OVERRIDE",
+    "condition": "LESS_THAN",
+    "threshold": 30.0
+  },
+  "exit_rules": {
+    "trailing_stop_activation_pct": 1.5,
+    "time_based_exit_bars": 12
+  }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+    <body class="bg-[#0b0f19] text-slate-200 p-8 font-sans">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-white">PulseGuard AI Strategy Skill Dashboard</h1>
+                    <p class="text-xs text-slate-400">Track 2 Live Environment Verification Report</p>
+                </div>
+                <span class="px-3 py-1 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-full text-xs font-mono">CAPITAL_PRESERVATION</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+                    <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Performance Metrics</h2>
+                    <div>
+                        <p class="text-xs text-slate-500">Net Profit / Max Drawdown</p>
+                        <p class="text-3xl font-extrabold text-rose-500">-16.38%</p>
+                    </div>
+                    <div class="border-t border-slate-800 pt-4 font-mono text-xs space-y-2">
+                        <p><span class="text-slate-400">Final Valuation:</span> $835.46</p>
+                        <p><span class="text-slate-400">Live Fear & Greed:</span> 15/100</p>
+                        <p><span class="text-slate-400">Risk Mitigation:</span> Enforced Risk Governor</p>
+                    </div>
+                </div>
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                    <div class="h-[300px] relative"><canvas id="eqChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            new Chart(document.getElementById('eqChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ["Step 0", "Step 60", "Step 120", "Step 180", "Step 240", "Step 300", "Step 360", "Step 420", "Step 480", "Step 540", "Step 600", "Step 660", "Step 720", "Step 780", "Step 840", "Step 900", "Step 960", "Step 1020", "Step 1080", "Step 1140", "Step 1200", "Step 1260", "Step 1320", "Step 1380", "Step 1440", "Step 1500", "Step 1560", "Step 1620", "Step 1680", "Step 1740", "Step 1800", "Step 1860", "Step 1920", "Step 1980", "Step 2040", "Step 2100", "Step 2160", "Step 2220", "Step 2280", "Step 2340", "Step 2400", "Step 2460", "Step 2520", "Step 2580", "Step 2640", "Step 2700", "Step 2760", "Step 2820", "Step 2880", "Step 2940", "Step 3000", "Step 3060", "Step 3120", "Step 3180", "Step 3240", "Step 3300", "Step 3360", "Step 3420", "Step 3480", "Step 3540", "Step 3600", "Step 3660", "Step 3720", "Step 3780", "Step 3840", "Step 3900", "Step 3960", "Step 4020", "Step 4080", "Step 4140", "Step 4200", "Step 4260", "Step 4320", "Step 4380", "Step 4440", "Step 4500", "Step 4560", "Step 4620", "Step 4680", "Step 4740", "Step 4800", "Step 4860", "Step 4920", "Step 4980", "Step 5040", "Step 5100", "Step 5160", "Step 5220", "Step 5280", "Step 5340", "Step 5400", "Step 5460", "Step 5520", "Step 5580", "Step 5640", "Step 5700", "Step 5760", "Step 5820", "Step 5880", "Step 5940", "Step 6000"],
+                    datasets: [{ label: 'Portfolio Value', data: [999.1446722012564, 1009.548072987863, 996.5046314340466, 953.5901267549077, 962.7066424010949, 947.4456190618346, 944.6175865067553, 943.50824233539, 951.0118892613207, 971.1413958080823, 957.0070936879432, 951.7473810043131, 933.3840218537688, 924.7377930542793, 916.8501707499861, 936.2950462053241, 915.5025888932305, 892.7254596126672, 880.7790671492569, 851.7267744486251, 856.9157084495321, 857.0488231927195, 878.5347640545276, 853.8775529608563, 878.5790673295846, 867.5751747889201, 868.6941091234337, 868.3606665278143, 869.2301336696612, 851.9504629548801, 862.7599702655763, 860.9452163159659, 858.3747657069864, 864.1182898263697, 859.9846836078129, 862.51242930226, 866.4676338960955, 880.6484114222615, 874.3850512799139, 871.4185761132314, 875.6761987150658, 893.3815251326619, 891.6952137954743, 878.8316082924912, 864.7541094463845, 864.591568476101, 860.8502163237529, 838.8378000952623, 818.0057116388762, 812.7076958465794, 827.325507722127, 822.8045844334256, 858.5583901204791, 865.3555226181682, 863.7246903688272, 870.4989235190249, 851.9464700652823, 864.5159965017612, 837.1129597021238, 858.1676399479514, 869.6153700969526, 845.2189891649392, 859.6162680585082, 850.9622479005506, 845.7860383547347, 848.8444532820008, 853.0647966786917, 870.029691989677, 863.3954758979942, 856.5659502514798, 871.3999119220779, 863.831048001744, 862.654526898579, 858.9073272727057, 859.0349028870353, 858.3526952352028, 855.1341586217573, 849.7742641822115, 835.8055900441933, 844.8062539077291, 827.7816017662587, 831.0424428529657, 827.3800622373851, 834.092755462228, 839.0690913205437, 832.3664970815835, 833.2689555700929, 831.4384697866408, 835.5942995838642, 818.6692384174228, 820.579146755435, 828.4836432671572, 833.4131521769314, 820.9087144037741, 820.5308068366379, 817.8687796652523, 818.8705028461761, 835.817876038177, 839.7640069377092, 833.4399056616408, 837.8602547921386], borderColor: '#818cf8', borderWidth: 2, fill: false, pointRadius: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        </script>
+    </body>
+    </html>
