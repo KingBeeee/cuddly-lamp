@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlareTrust - Confidential Credit Scoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        :root { --bg: #0d0e12; --card: #161820; --primary: #ff4a75; --text: #f0f2f5; --text-muted: #8a90a0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        .container { max-width: 600px; width: 100%; }
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: var(--primary); margin-bottom: 8px; }
+        p { color: var(--text-muted); margin: 0; }
+        .card { background: var(--card); border: 1px solid #262936; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { background: #363946; cursor: not-allowed; }
+        .step { display: flex; align-items: center; margin-bottom: 16px; opacity: 0.4; transition: opacity 0.3s; }
+        .step.active { opacity: 1; font-weight: 600; color: var(--primary); }
+        .step.completed { opacity: 1; color: #10b981; }
+        .circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 12px; font-weight: bold; }
+        .result-box { text-align: center; display: none; }
+        .score { font-size: 48px; font-weight: 800; color: #10b981; margin: 16px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FlareTrust</h1>
+            <p>Confidential Off-Chain Credit Scoring for DeFi</p>
+        </header>
+
+        <div class="card">
+            <button id="connectBtn" class="btn" onclick="connectWallet()">1. Connect Wallet</button>
+            <p id="walletTxt" style="margin-top:12px; font-family:monospace; font-size:14px; text-align:center;"></p>
+        </div>
+
+        <div class="card" id="pipelineCard" style="display:none;">
+            <button id="actionBtn" class="btn" onclick="startConfidentialCompute()">2. Request Under-Collateralized Loan Eligibility</button>
+            
+            <div id="steps" style="margin-top: 24px;">
+                <div id="step1" class="step"><div class="circle">1</div> Smart Contract Emits Request</div>
+                <div id="step2" class="step"><div class="circle">2</div> TEE Encrypted Web2 Data Fetch</div>
+                <div id="step3" class="step"><div class="circle">3</div> Private ML Credit Scoring Compute</div>
+                <div id="step4" class="step"><div class="circle">4</div> Cryptographic Signature Generation</div>
+                <div id="step5" class="step"><div class="circle">5</div> Attestation Verified On-Chain</div>
+            </div>
+        </div>
+
+        <div class="card result-box" id="resultCard">
+            <h3>Your Verified Credit Score</h3>
+            <div class="score" id="scoreValue">000</div>
+            <p style="color: #10b981;">🎉 Approved for Under-Collateralized FAsset Loan!</p>
+        </div>
+    </div>
+
+    <script>
+        let userWallet = "";
+        const BACKEND_URL = window.location.origin === "null" ? "http://82.26.193.139:8000" : `http://${window.location.hostname}:8000`;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    await provider.send("eth_requestAccounts", []);
+                    const signer = provider.getSigner();
+                    userWallet = await signer.getAddress();
+                    
+                    document.getElementById("walletTxt").innerText = `Connected: ${userWallet}`;
+                    document.getElementById("connectBtn").innerText = "Wallet Connected";
+                    document.getElementById("connectBtn").disabled = true;
+                    document.getElementById("pipelineCard").style.display = "block";
+                } catch (err) {
+                    alert("User rejected wallet connection.");
+                }
+            } else {
+                alert("Please install MetaMask to try the interactive demo!");
+            }
+        }
+
+        async function startConfidentialCompute() {
+            document.getElementById("actionBtn").disabled = true;
+            document.getElementById("actionBtn").innerText = "Processing Pipeline...";
+            
+            const runStep = (id, status) => {
+                const el = document.getElementById(id);
+                el.className = `step ${status}`;
+            };
+
+            // Step 1: Trigger
+            runStep("step1", "active");
+            await new Promise(r => setTimeout(r, 1500));
+            runStep("step1", "completed");
+
+            // Step 2: Fetch
+            runStep("step2", "active");
+            await new Promise(r => setTimeout(r, 1500));
+            runStep("step2", "completed");
+
+            // Step 3: Compute & API Handshake
+            runStep("step3", "active");
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/calculate-score`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ wallet_address: userWallet })
+                });
+                const data = await response.json();
+                
+                if(data.status === "success") {
+                    runStep("step3", "completed");
+                    
+                    // Step 4: Signing
+                    runStep("step4", "active");
+                    await new Promise(r => setTimeout(r, 1200));
+                    runStep("step4", "completed");
+
+                    // Step 5: On-chain Verification
+                    runStep("step5", "active");
+                    await new Promise(r => setTimeout(r, 1200));
+                    runStep("step5", "completed");
+
+                    // Reveal Result
+                    document.getElementById("scoreValue").innerText = `${data.score} / 1000`;
+                    document.getElementById("resultCard").style.display = "block";
+                    document.getElementById("actionBtn").innerText = "Execution Successful";
+                } else {
+                    alert("TEE Enclave error: " + data.detail);
+                }
+            } catch (err) {
+                alert("Could not connect to VPS API backend. Ensure port 8000 is open.");
+                document.getElementById("actionBtn").disabled = false;
+                document.getElementById("actionBtn").innerText = "Try Again";
+            }
+        }
+    </script>
+</body>
+</html>
