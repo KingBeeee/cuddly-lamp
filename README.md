@@ -6,6 +6,18 @@ FlareTrust bridges the gap between traditional Web2 financial credit histories a
 * **The Problem:** Current DeFi lending requires massive over-collateralization because protocols cannot trust or verify off-chain creditworthiness without breaking user privacy.
 * **The Solution:** FlareTrust uses an off-chain secure enclave simulator to fetch encrypted banking APIs, process credit scoring logic dynamically via a private script, and cryptographically attest/sign the result back onto the Flare network securely.
 
+* ## 📸 Interface Preview
+
+### 1. Request Stage (Initial State)
+<p align="center">
+  <img src="frontend/Picture1.png" width="550" alt="FlareTrust Initial Connection Screen">
+</p>
+
+### 2. Confidential Execution & Verified Outcome
+<p align="center">
+  <img src="frontend/Picture2.png" width="550" alt="FlareTrust Successful Pipeline Run">
+</p>
+
 ---
 
 ## 🛠️ System Architecture
