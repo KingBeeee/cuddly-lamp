@@ -45,5 +45,5 @@ FlareTrust bridges the gap between traditional Web2 financial credit histories a
 ```bash
 cd flaretrust-backend
 source venv/bin/activate
-pip install -r requirements.txt
-python server.py
+pip install -r backend/requirements.txt
+python backend/server.py
