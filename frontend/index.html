@@ -13,13 +13,13 @@
         h1 { color: var(--primary); margin-bottom: 8px; }
         p { color: var(--text-muted); margin: 0; }
         .card { background: var(--card); border: 1px solid #262936; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; transition: opacity 0.2s; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; font-size: 16px; font-weight: 600; border-radius: 6px; cursor: pointer; width: 100%; }
         .btn:hover { opacity: 0.9; }
         .btn:disabled { background: #363946; cursor: not-allowed; }
         .step { display: flex; align-items: center; margin-bottom: 16px; opacity: 0.4; transition: opacity 0.3s; }
         .step.active { opacity: 1; font-weight: 600; color: var(--primary); }
         .step.completed { opacity: 1; color: #10b981; }
-        .circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 12px; font-weight: bold; }
+        .circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 12px; flex-shrink: 0; }
         .result-box { text-align: center; display: none; }
         .score { font-size: 48px; font-weight: 800; color: #10b981; margin: 16px 0; }
     </style>
@@ -38,7 +38,7 @@
 
         <div class="card" id="pipelineCard" style="display:none;">
             <button id="actionBtn" class="btn" onclick="startConfidentialCompute()">2. Request Under-Collateralized Loan Eligibility</button>
-            
+
             <div id="steps" style="margin-top: 24px;">
                 <div id="step1" class="step"><div class="circle">1</div> Smart Contract Emits Request</div>
                 <div id="step2" class="step"><div class="circle">2</div> TEE Encrypted Web2 Data Fetch</div>
@@ -66,8 +66,11 @@
                     await provider.send("eth_requestAccounts", []);
                     const signer = provider.getSigner();
                     userWallet = await signer.getAddress();
-                    
-                    document.getElementById("walletTxt").innerText = `Connected: ${userWallet}`;
+
+                    // Truncate address for mobile view (e.g. 0xE6C4...9da3a)
+                    const truncatedWallet = `${userWallet.substring(0, 6)}...${userWallet.substring(userWallet.length - 4)}`;
+
+                    document.getElementById("walletTxt").innerText = `Connected: ${truncatedWallet}`;
                     document.getElementById("connectBtn").innerText = "Wallet Connected";
                     document.getElementById("connectBtn").disabled = true;
                     document.getElementById("pipelineCard").style.display = "block";
@@ -82,7 +85,7 @@
         async function startConfidentialCompute() {
             document.getElementById("actionBtn").disabled = true;
             document.getElementById("actionBtn").innerText = "Processing Pipeline...";
-            
+
             const runStep = (id, status) => {
                 const el = document.getElementById(id);
                 el.className = `step ${status}`;
@@ -107,18 +110,16 @@
                     body: JSON.stringify({ wallet_address: userWallet })
                 });
                 const data = await response.json();
-                
+
                 if(data.status === "success") {
                     runStep("step3", "completed");
-                    
+
                     // Step 4: Signing
                     runStep("step4", "active");
                     await new Promise(r => setTimeout(r, 1200));
                     runStep("step4", "completed");
 
-                    // Step 5: On-chain Verification
-                    runStep("step5", "active");
-                    await new Promise(r => setTimeout(r, 1200));
+                    // Step 5: Verification
                     runStep("step5", "completed");
 
                     // Reveal Result
