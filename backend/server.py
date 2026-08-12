@@ -27,7 +27,7 @@ async def trigger_pipeline(data: RequestModel):
         wallet = data.wallet_address
         print(f"[API] Request received for wallet: {wallet}. Routing directly to TEE...")
 
-        # The API server passes ONLY the wallet identifier. 
+        # The API server passes ONLY the wallet identifier.
         # The TEE handles fetching, scoring, and signing entirely inside its boundary.
         score = run_enclave_pipeline(wallet)
 
