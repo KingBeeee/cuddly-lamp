@@ -34,7 +34,7 @@ To ensure zero-knowledge data exposure and absolute privacy, the Web2 data orche
 ## 🏗️ Technical Stack & Live Deployments
 
 * **Blockchain:** Flare Coston2 Testnet
-* **Smart Contract Address:** `0x236FC326142643A23382a47E3D896ba9A61497E5`
+* **Smart Contract Address:** `0x1E06535c70594CAB7a701f5F3447cD0b264DC0a5`
 * **Backend Stack:** Python 3.12, Web3.py, FastAPI, Uvicorn
 * **Frontend Stack:** Clean Semantic HTML5, CSS3 Grid/Flexbox, Ethers.js (v5)
 
